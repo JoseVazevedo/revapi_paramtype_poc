@@ -12,14 +12,14 @@ public class Main {
 
         final ListWrapper listWrapper = new ListWrapper(list);
 
-        printList(listWrapper.getTest());
+        printList(listWrapper.getStringList());
 
         final List<String> newList = new ArrayList<String>(1);
         newList.add("new string");
 
         listWrapper.mergeList(newList);
 
-        printList(listWrapper.getTest());
+        printList(listWrapper.getStringList());
     }
 
     private static void printList(final List<String> listToPrint) {

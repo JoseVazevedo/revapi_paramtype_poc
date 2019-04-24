@@ -10,7 +10,7 @@ public class ListWrapper {
         this.stringList = stringList;
     }
 
-    public List<String> getTest() {
+    public List<String> getStringList() {
         return stringList;
     }
 
