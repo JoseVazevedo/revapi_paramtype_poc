@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.feedzai</groupId>
+    <artifactId>revapi-paramtype-poc</artifactId>
+    <version>1.0.0</version>
+
+    <properties>
+
+        <revapi.java.version>0.19.0</revapi.java.version>
+        <revapi.reporter.text.version>0.10.0</revapi.reporter.text.version>
+        <revapi.maven.plugin.version>0.10.5</revapi.maven.plugin.version>
+        <revapi.ignore>${user.dir}/revapi/ignore.json</revapi.ignore>
+        <revapi.output>${user.dir}/target/revapi_output.txt</revapi.output>
+
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.revapi</groupId>
+            <artifactId>revapi-java</artifactId>
+            <version>${revapi.java.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.revapi</groupId>
+            <artifactId>revapi-reporter-text</artifactId>
+            <version>${revapi.reporter.text.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.revapi</groupId>
+                    <artifactId>revapi-maven-plugin</artifactId>
+                    <version>${revapi.maven.plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+
+        <plugins>
+            <plugin>
+                <!-- Build an executable JAR -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.revapi</groupId>
+                <artifactId>revapi-maven-plugin</artifactId>
+                <version>${revapi.maven.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.revapi</groupId>
+                        <artifactId>revapi-java</artifactId>
+                        <version>${revapi.java.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.revapi</groupId>
+                        <artifactId>revapi-reporter-text</artifactId>
+                        <version>${revapi.reporter.text.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <skip>false</skip>
+                    <checkDependencies>false</checkDependencies>
+                    <resolveProvidedDependencies>false</resolveProvidedDependencies>
+                    <failOnUnresolvedDependencies>false</failOnUnresolvedDependencies>
+                    <failOnUnresolvedArtifacts>false</failOnUnresolvedArtifacts>
+                    <failBuildOnProblemsFound>false</failBuildOnProblemsFound>
+                    <failOnMissingConfigurationFiles>false</failOnMissingConfigurationFiles>
+                    <failSeverity>breaking</failSeverity>
+                    <versionFormat>\d+\.\d+\.\d+</versionFormat>
+                    <analysisConfigurationFiles>
+                        <file>${revapi.ignore}</file>
+                    </analysisConfigurationFiles>
+                    <analysisConfiguration>
+                        <revapi.java>
+                            <missing-classes>
+                                <behavior>ignore</behavior>
+                                <ignoreMissingAnnotations>true</ignoreMissingAnnotations>
+                            </missing-classes>
+                        </revapi.java>
+                        <revapi.reporter.text>
+                            <minSeverity>BREAKING</minSeverity>
+                            <output>${revapi.output}</output>
+                            <append>true</append>
+                        </revapi.reporter.text>
+                    </analysisConfiguration>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
